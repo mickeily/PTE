@@ -1,9 +1,7 @@
 package com.example.pte;
-
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,15 +11,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-public class TextReader extends AppCompatActivity
+public class TextReader
 {
-
-    String archivo[][] = new String[10000][30];
-    String arregloSecundario[] =new String[30];
     public static final int MY_PERMISSIONG = 1;
 
     public String[][] cargar()
     {
+        String archivo[][] = new String[10000][30];
+        String arregloSecundario[] =new String[30];
+
+
         File myFile = new File("/sdcard/PT/texto.txt");
         try
         {
@@ -40,49 +39,29 @@ public class TextReader extends AppCompatActivity
             myReader.close();
 
 
+
         }catch (Exception e)
         {
             e.getMessage();
-
         }
+        return archivo;
 
-
-
-
-        return null;
 
     }
 
-    public void onRequestPermissionResult (int requestCode,String[] permission, int[] grantResults)
+    public void checkPermission(Activity activity)
     {
-        switch (requestCode)
+        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
         {
-            case MY_PERMISSIONG:
-            if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED)
-            {
-
-            }else
-            {
-                return;
-            }
-        }
-    }
-
-    public void checkPermission()
-    {
-        if(ContextCompat.checkSelfPermission(TextReader.this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)
-        {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(TextReader.this,Manifest.permission.READ_EXTERNAL_STORAGE))
+            if(ActivityCompat.shouldShowRequestPermissionRationale(activity,Manifest.permission.READ_EXTERNAL_STORAGE))
             {
 
             }
             else
             {
-                ActivityCompat.requestPermissions(TextReader.this, new String[] Manifest.permission.READ_EXTERNAL_STORAGE),MY_PERMISSIONG;
+                ActivityCompat.requestPermissions(activity, new String[] { Manifest.permission.READ_EXTERNAL_STORAGE} ,MY_PERMISSIONG);
             }
         }
     }
-
-
 
 }
